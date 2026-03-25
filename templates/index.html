@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Конвертер единиц</title>
+</head>
+<body>
+
+    <h1>Конвертер единиц</h1>
+
+    <form method="POST">
+
+        <label>Тип конвертации:</label><br>
+        <select name="choice">
+            <!-- menu — это словарь MENU из app.py.
+                 Flask подставляет его сюда через render_template. -->
+            {% for num, item in menu.items() %}
+                <option value="{{ num }}" {% if num == last_choice %}selected{% endif %}>{{ item[0] }}</option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+        <label>Значение:</label><br>
+        <input type="text" name="value" value="{{ last_value }}" placeholder="Введите число">
+
+        <br><br>
+
+        <button type="submit">Конвертировать</button>
+
+    </form>
+
+    <!-- Показываем результат только если он есть -->
+    {% if result %}
+        <hr>
+        <p><strong>Результат: {{ result }}</strong></p>
+    {% endif %}
+
+    <!-- Показываем ошибку только если она есть -->
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+</body>
+</html>
