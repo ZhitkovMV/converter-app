@@ -144,11 +144,29 @@
 
         <h1>Конвертер единиц</h1>
 
+        <!-- Шаг 1: выбор категории. Отправляет GET-запрос /?category=... -->
+        <form method="GET">
+            <label>Категория</label>
+            <select name="category" onchange="this.form.submit()">
+                <option value="">— выберите категорию —</option>
+                {% for key, cat in categories.items() %}
+                    <option value="{{ key }}" {% if key == selected_category %}selected{% endif %}>
+                        {{ cat.label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+
+        <!-- Шаг 2: конвертация. Показывается только если категория выбрана. -->
+        {% if selected_category and selected_category in categories %}
         <form method="POST">
 
-            <label>Тип конвертации</label>
+            <!-- Передаём категорию скрытым полем, чтобы Flask знал её при POST -->
+            <input type="hidden" name="category" value="{{ selected_category }}">
+
+            <label>Конвертация</label>
             <select name="choice">
-                {% for num, item in menu.items() %}
+                {% for num, item in categories[selected_category].conversions.items() %}
                     <option value="{{ num }}" {% if num == last_choice %}selected{% endif %}>{{ item[0] }}</option>
                 {% endfor %}
             </select>
@@ -159,6 +177,7 @@
             <button type="submit">Конвертировать</button>
 
         </form>
+        {% endif %}
 
         {% if result %}
             <div class="result">{{ result }}</div>

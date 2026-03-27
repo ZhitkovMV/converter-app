@@ -7,6 +7,8 @@ RATES = {
     "EUR_TO_USD": 1.09,
     "USD_TO_RUB": 90.5,
     "RUB_TO_USD": 1 / 90.5,
+    "EUR_TO_RUB": 90.5 / 0.92,
+    "RUB_TO_EUR": 0.92 / 90.5,
 }
 
 
@@ -25,6 +27,8 @@ def load_rates():
         RATES["EUR_TO_USD"] = 1 / rates["EUR"]
         RATES["USD_TO_RUB"] = rates["RUB"]
         RATES["RUB_TO_USD"] = 1 / rates["RUB"]
+        RATES["EUR_TO_RUB"] = rates["RUB"] / rates["EUR"]
+        RATES["RUB_TO_EUR"] = rates["EUR"] / rates["RUB"]
         print("Курсы загружены успешно.\n")
 
     except requests.exceptions.ConnectionError:
