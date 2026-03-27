@@ -3,43 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <title>Конвертер единиц</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 48px 16px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 28px;
+            color: #1a1a2e;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #6b7280;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            color: #1a1a2e;
+            background: #f9fafb;
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 20px;
+            appearance: none;
+        }
+
+        select:focus, input[type="text"]:focus {
+            border-color: #6366f1;
+            background: #ffffff;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #6366f1;
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        button:hover {
+            background: #4f46e5;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .result {
+            margin-top: 24px;
+            padding: 16px 20px;
+            background: #eef2ff;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #4338ca;
+        }
+
+        .error {
+            margin-top: 24px;
+            padding: 16px 20px;
+            background: #fef2f2;
+            border-radius: 12px;
+            font-size: 14px;
+            color: #dc2626;
+        }
+
+        .history {
+            margin-top: 32px;
+        }
+
+        .history h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .history ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .history li {
+            padding: 12px 16px;
+            background: #f9fafb;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #374151;
+        }
+    </style>
 </head>
 <body>
 
-    <h1>Конвертер единиц</h1>
+    <div class="card">
 
-    <form method="POST">
+        <h1>Конвертер единиц</h1>
 
-        <label>Тип конвертации:</label><br>
-        <select name="choice">
-            <!-- menu — это словарь MENU из app.py.
-                 Flask подставляет его сюда через render_template. -->
-            {% for num, item in menu.items() %}
-                <option value="{{ num }}" {% if num == last_choice %}selected{% endif %}>{{ item[0] }}</option>
-            {% endfor %}
-        </select>
+        <form method="POST">
 
-        <br><br>
+            <label>Тип конвертации</label>
+            <select name="choice">
+                {% for num, item in menu.items() %}
+                    <option value="{{ num }}" {% if num == last_choice %}selected{% endif %}>{{ item[0] }}</option>
+                {% endfor %}
+            </select>
 
-        <label>Значение:</label><br>
-        <input type="text" name="value" value="{{ last_value }}" placeholder="Введите число">
+            <label>Значение</label>
+            <input type="text" name="value" value="{{ last_value }}" placeholder="Введите число">
 
-        <br><br>
+            <button type="submit">Конвертировать</button>
 
-        <button type="submit">Конвертировать</button>
+        </form>
 
-    </form>
+        {% if result %}
+            <div class="result">{{ result }}</div>
+        {% endif %}
 
-    <!-- Показываем результат только если он есть -->
-    {% if result %}
-        <hr>
-        <p><strong>Результат: {{ result }}</strong></p>
-    {% endif %}
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
 
-    <!-- Показываем ошибку только если она есть -->
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
+        {% if history %}
+            <div class="history">
+                <h3>История конвертаций</h3>
+                <ul>
+                    {% for entry in history %}
+                        <li>{{ entry.label }}: {{ entry.input }} = {{ entry.output }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+    </div>
 
 </body>
 </html>

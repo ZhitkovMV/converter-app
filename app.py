@@ -28,6 +28,9 @@ MENU = {
 # Загружаем курсы валют один раз при старте сервера
 load_rates()
 
+# История конвертаций — просто список в памяти
+history = []
+
 
 # @app.route — говорит Flask: "когда пользователь открывает /,
 # вызови функцию index()"
@@ -63,9 +66,17 @@ def index():
         result_value = func(value)
         result = f"{value} {unit_from} = {result_value:.4f} {unit_to}"
 
+        # Добавляем запись в историю
+        history.append({
+            "label": label,
+            "input": f"{value} {unit_from}",
+            "output": f"{result_value:.4f} {unit_to}",
+        })
+
     # render_template берёт файл templates/index.html и передаёт в него данные
     return render_template("index.html", menu=MENU, result=result, error=error,
-                           last_choice=last_choice, last_value=last_value)
+                           last_choice=last_choice, last_value=last_value,
+                           history=history)
 
 
 if __name__ == "__main__":
