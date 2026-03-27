@@ -48,7 +48,7 @@
             letter-spacing: 0.05em;
         }
 
-        select, input[type="text"] {
+        select, input[type="number"] {
             width: 100%;
             padding: 12px 16px;
             border: 1.5px solid #e5e7eb;
@@ -63,7 +63,7 @@
             appearance: none;
         }
 
-        select:focus, input[type="text"]:focus {
+        select:focus, input[type="number"]:focus {
             border-color: #6366f1;
             background: #ffffff;
         }
@@ -136,6 +136,21 @@
             font-size: 14px;
             color: #374151;
         }
+
+        .history-empty {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        .result-label {
+            margin-top: 24px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+        }
     </style>
 </head>
 <body>
@@ -172,7 +187,7 @@
             </select>
 
             <label>Значение</label>
-            <input type="text" name="value" value="{{ last_value }}" placeholder="Введите число">
+            <input type="number" step="any" name="value" value="{{ last_value }}" placeholder="Например: 100" autofocus>
 
             <button type="submit">Конвертировать</button>
 
@@ -180,6 +195,7 @@
         {% endif %}
 
         {% if result %}
+            <div class="result-label">Результат</div>
             <div class="result">{{ result }}</div>
         {% endif %}
 
@@ -187,16 +203,18 @@
             <div class="error">{{ error }}</div>
         {% endif %}
 
-        {% if history %}
-            <div class="history">
-                <h3>История конвертаций</h3>
+        <div class="history">
+            <h3>История конвертаций</h3>
+            {% if history %}
                 <ul>
                     {% for entry in history %}
                         <li>{{ entry.label }}: {{ entry.input }} = {{ entry.output }}</li>
                     {% endfor %}
                 </ul>
-            </div>
-        {% endif %}
+            {% else %}
+                <p class="history-empty">Пока нет конвертаций — попробуйте что-нибудь посчитать.</p>
+            {% endif %}
+        </div>
 
     </div>
 

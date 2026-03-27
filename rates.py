@@ -16,13 +16,23 @@ def load_rates():
     print("Загружаю актуальные курсы валют...")
     try:
         response = requests.get("https://open.er-api.com/v6/latest/USD", timeout=5)
+
+        if response.status_code != 200:
+            print(f"Ошибка: API вернул статус {response.status_code}. Используются встроенные курсы.")
+            return
+
         data = response.json()
 
-        if data["result"] != "success":
+        if data.get("result") != "success":
             print("Ошибка: API вернул неуспешный ответ. Используются встроенные курсы.")
             return
 
-        rates = data["rates"]
+        rates = data.get("rates", {})
+
+        if "EUR" not in rates or "RUB" not in rates:
+            print("Ошибка: в ответе API нет нужных валют. Используются встроенные курсы.")
+            return
+
         RATES["USD_TO_EUR"] = rates["EUR"]
         RATES["EUR_TO_USD"] = 1 / rates["EUR"]
         RATES["USD_TO_RUB"] = rates["RUB"]
