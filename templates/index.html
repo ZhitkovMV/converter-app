@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Конвертер единиц</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -18,17 +19,26 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            padding: 48px 16px;
+            padding: 24px 12px;
         }
 
         .card {
             background: #ffffff;
             border-radius: 20px;
-            padding: 40px;
+            padding: 24px;
             width: 100%;
             max-width: 480px;
             box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
             height: fit-content;
+        }
+
+        @media (min-width: 520px) {
+            body {
+                padding: 48px 16px;
+            }
+            .card {
+                padding: 40px;
+            }
         }
 
         h1 {
